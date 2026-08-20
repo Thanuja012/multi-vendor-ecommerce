@@ -33,15 +33,18 @@ public class SecurityConfig {
             )
 
             .authorizeHttpRequests(auth -> auth
-                // Health check
-                .requestMatchers("/api/health").permitAll()
+    // Public root endpoint
+    .requestMatchers("/").permitAll()
 
-                // Authentication
-                .requestMatchers("/api/auth/**").permitAll()
+    // Health check
+    .requestMatchers("/api/health").permitAll()
 
-                // Everything else requires JWT
-                .anyRequest().authenticated()
-            )
+    // Login/register
+    .requestMatchers("/api/auth/**").permitAll()
+
+    // Everything else requires JWT
+    .anyRequest().authenticated()
+)
 
             .addFilterBefore(
                 jwtAuthFilter,
