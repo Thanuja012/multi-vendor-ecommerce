@@ -1,4 +1,5 @@
 package com.ecommerce.security;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -33,18 +34,10 @@ public class SecurityConfig {
             )
 
             .authorizeHttpRequests(auth -> auth
-    // Public root endpoint
-    .requestMatchers("/").permitAll()
-
-    // Health check
-    .requestMatchers("/api/health").permitAll()
-
-    // Login/register
-    .requestMatchers("/api/auth/**").permitAll()
-
-    // Everything else requires JWT
-    .anyRequest().authenticated()
-)
+                .requestMatchers("/api/health").permitAll()
+                .requestMatchers("/api/auth/**").permitAll()
+                .anyRequest().authenticated()
+            )
 
             .addFilterBefore(
                 jwtAuthFilter,
@@ -59,10 +52,7 @@ public class SecurityConfig {
 
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOriginPatterns(Arrays.asList(
-            "http://localhost:*",
-            "https://*.onrender.com"
-        ));
+        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
 
         configuration.setAllowedMethods(Arrays.asList(
             "GET",
