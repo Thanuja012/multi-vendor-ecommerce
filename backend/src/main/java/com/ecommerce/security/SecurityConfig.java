@@ -1,5 +1,4 @@
 package com.ecommerce.security;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,6 +8,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import jakarta.annotation.PostConstruct;
 
 import java.util.Arrays;
 
@@ -74,6 +75,10 @@ public class SecurityConfig {
 
         return source;
     }
+    @PostConstruct
+public void init() {
+    System.out.println(">>> CUSTOM SECURITY CONFIG LOADED <<<");
+}
 
     @Bean
     public org.springframework.security.crypto.password.PasswordEncoder passwordEncoder() {
