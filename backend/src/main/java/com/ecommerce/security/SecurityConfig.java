@@ -1,4 +1,5 @@
 package com.ecommerce.security;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,9 +10,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import jakarta.annotation.PostConstruct;
-
-import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 public class SecurityConfig {
@@ -35,8 +34,12 @@ public class SecurityConfig {
             )
 
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/health").permitAll()
+
+                // Public endpoints
+                .requestMatchers("/", "/api/health").permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
+
+                // Everything else requires JWT
                 .anyRequest().authenticated()
             )
 
@@ -53,9 +56,9 @@ public class SecurityConfig {
 
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
+        configuration.setAllowedOriginPatterns(List.of("*"));
 
-        configuration.setAllowedMethods(Arrays.asList(
+        configuration.setAllowedMethods(List.of(
             "GET",
             "POST",
             "PUT",
@@ -64,7 +67,7 @@ public class SecurityConfig {
             "OPTIONS"
         ));
 
-        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowedHeaders(List.of("*"));
 
         configuration.setAllowCredentials(true);
 
@@ -75,10 +78,6 @@ public class SecurityConfig {
 
         return source;
     }
-    @PostConstruct
-public void init() {
-    System.out.println(">>> CUSTOM SECURITY CONFIG LOADED <<<");
-}
 
     @Bean
     public org.springframework.security.crypto.password.PasswordEncoder passwordEncoder() {
